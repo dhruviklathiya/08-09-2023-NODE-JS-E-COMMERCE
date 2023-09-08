@@ -1,0 +1,14 @@
+{
+  "name": "08-09-2023-node-js-e-commerce",
+  "version": "1.0.0",
+  "description": "\"🌐 Node.js E-Commerce Platform 🛒  A powerful e-commerce solution in Node.js. Secure payments, easy product management, user authentication, and more. Simplified data structure with product_id referencing for user details. Join us in revolutionizing online shopping!\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "D49",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
