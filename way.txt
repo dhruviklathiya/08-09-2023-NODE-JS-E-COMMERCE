@@ -1,0 +1,247 @@
+npm init in project
+
+npm i express
+
+index.js of src =>
+        const express = require("express");
+        const http = require("http");
+        const app = express(); {{{Initializing express in app variable}}}
+
+        const server = http.createServer(app); {{{Creating server of http in variable as server}}}
+        server.listen(8080,()=>{
+        console.log("===================== =  == = ==  == =");
+        }); {{{Providing port on which server should listen and what to do if server is running}}}
+
+npm i nodemon
+
+package.json =>
+        Check dependencies nodemon is installed or not
+        in scripts object write script for startting which file on running command npm start
+        "start": "nodemon path_of_file" {{{in scripts of package.json}}}
+
+Terminal =>
+        npm start
+        Your server must be running and log should come in terminal which you written on server.listen() in index.js of src file
+
+* Make port dynamic
+        => env is best way to do that cause it will work across the project
+        => or create a variable let port = 5500 and pass this variable in server.listen() as first parameter and then in log write port
+        => let port = 5500
+        => server.listen(port,()=>{
+            console.log("==========="+port+"=============");
+        })
+
+
+npm i body-parser
+npm i cors
+
+index.js of src =>
+            const bodyParser = require("body-parser");
+            const cors = require("cors");
+            const { connectDB } = require("./db/dbConnection.js");
+            click on ./db/dbConnection.js and create file this will create fill in db folder
+
+dbconnection.js =>
+            const mongoose = require("mongoose");
+
+npm i mongoose
+
+dbconnection.js =>
+            const config = require("../config/config.js");
+            click on ../config/config.js and create fill this willcreate file in config folder
+
+            if(not using env){
+                const connectDB = async () => {
+                            mongoose
+                              .connect(paste mopngodb url here)
+                              .then((data) => {
+                                console.log("Database connection successfully!");
+                              })
+                              .catch((error) => {
+                                console.log("Database connetion error: ", error);
+                              });
+                        };
+            }
+
+            if(using env){
+Terminal =>
+    npm i dotenv
+    npm i joi
+
+config.js =>
+                                 {
+                                        const Joi = require("joi");
+                                        const dotenv = require("dotenv");
+
+                                        dotenv.config();
+
+                                        const envVarsSchema = Joi.object({
+                                          PORT: Joi.number().default(3000),
+                                          MONGODB_URL: Joi.string().trim().description("Mongodb url"),
+                                          JWT_SECRET_KEY: Joi.string()
+                                            .description("Jwt sectreat key")
+                                            .default("thisisjwtsecreat_key"),
+                                          SMTP_HOST: Joi.string().description("server that will send the emails"),
+                                          SMTP_PORT: Joi.number().description("port to connect to the email server"),
+                                          SMTP_USERNAME: Joi.string().description("username for email server"),
+                                          SMTP_PASSWORD: Joi.string().description("password for email server"),
+                                          EMAIL_FROM: Joi.string().description(
+                                            "the from field in the emails sent by the app"
+                                          ),
+                                        }).unknown();
+
+                                        const { value: envVars, error } = envVarsSchema
+                                          .prefs({ errors: { label: "key" } })
+                                          .validate(process.env);
+
+                                        if (error) {
+                                          console.log("Config Error: ", error);
+                                        }
+
+                                        module.exports = {
+                                          port: envVars.PORT,
+                                          mongodb: {
+                                            url: envVars.MONGODB_URL,
+                                            options: {
+                                              useNewUrlParser: true,
+                                              useUnifiedTopology: true,
+                                            },
+                                          },
+                                          jwt: {
+                                            secret_key: envVars.JWT_SECRET_KEY,
+                                          },
+                                          email: {
+                                            smtp: {
+                                              host: envVars.SMTP_HOST,
+                                              port: envVars.SMTP_PORT,
+                                              auth: {
+                                                user: envVars.SMTP_USERNAME,
+                                                pass: envVars.SMTP_PASSWORD,
+                                              },
+                                            },
+                                            from: envVars.EMAIL_FROM,
+                                          },
+                                        };
+                        }
+
+
+In .env file =>
+MONGODB_URL = mongodb+srv://dhruviklathiya:AND0wnf0LWfZsY0K@d49cluster.kb3sp66.mongodb.net/
+PORT = 5500
+
+In dbconnection.js => {
+                            const mongoose = require("mongoose");
+                            const config = require("../config/config");
+
+                            const connectDB = async () => {
+                              mongoose
+                                .connect(config.mongodb.url, config.mongodb.options)
+                                .then((data) => {
+                                  console.log("Database connection successfully!");
+                                })
+                                .catch((error) => {
+                                  console.log("Database connetion error: ", error);
+                                });
+                            };
+
+                            module.exports = { connectDB }
+                    }
+}
+
+We're gonna use connectDB function in index.js before starting server
+
+In index.js of src =>
+                        connectDB(); {{{Connecting to database}}}
+
+We're going to use port as dynamic port from env that's why we need to use config.js file in index.js of src
+
+In index.js of src =>
+                        const config = require("./config/config");
+                        server.listen(config.port,()=>{console.log("=====Server is running on port: "+ config.port+" =====")})
+
+Terminal Checkpoint ====> npm start
+        Output should be this in terminal: =====>
+                                        Server is running on port: 5500 =====
+                                        Database connection successfully!
+
+Let's add something crucial : cronjob will run any function you're willing to run on fix interval or at fix time
+
+In index.js of src =>
+                        require("./helpers/crons.js");
+                        click on ./helpers/crons.js
+
+In crons.js =>
+                            const CronJob = require("cron").CronJob;
+
+                            /** It's running on every 3 seconds. */
+                            new CronJob(
+                              "*/3 * * * * *",
+                              function () {
+                                console.log("It's running on every 3 seconds.");
+                              },
+                              null,
+                              false,
+                              "Asia/Kolkata"
+                            ).start();
+
+                            /** It's running on when clock time is 7:45 of 24 hours */
+                            new CronJob(
+                              "37 8 * * *",
+                              function () {
+                                console.log("It's running on when clock time is 8:37");
+                              },
+                              null,
+                              false,
+                              //   "America/Sao_Paulo"
+                              "Asia/Kolkata"
+                            ).start();
+
+Terminal => npm i cron
+
+Terminal Checkpoint ====> npm start
+        Output should be this in terminal: =====>
+                                                    =====Server is running on port: 5500 =====
+                                                    Database connection successfully!
+                                                    It's running on every 3 seconds.
+                                                    It's running on every 3 seconds.
+                                                    It's running on every 3 seconds.
+
+
+In index.js of src =>   position this before connectDB() function
+                        app.use(bodyParser.urlencoded({ extended: false }));
+                        app.use(bodyParser.json());
+                        app.use(cors());
+                        app.options("*", cors());
+                        app.use("/v1", routes);
+                        app.use((req, res, next) => {
+                            next(new Error("Route not found!"));
+                        });
+
+Now we will link routes so,
+In index.js of src =>
+                        const routes = require("./routes /v1");
+
+Now create folder name routes /v1
+    inside create index.js file and import this folder to index.js of src
+
+In index.js of routes =>
+                        const express = require("express")
+                        const router = express.Router() {{{Initializing Router function of express in variable name router}}}
+                        module.exports = router {{{exporting this variable which will contain routes}}}
+
+Now we will fast forward process =>
+            Create routes particular files in routes /v1
+            Import all those in index.js of routes /v1
+
+Create models folder
+      Create index.js of models
+      Create particular model files
+      Export in single name from index.js of model
+Create validations folder
+      Create index.js of validations
+      Create particular model files
+      Export in single name from index.js of model
+Create controller folder
+      Create index.js of controller
+      Create particular model files
+      Export in single name from index.js of model
