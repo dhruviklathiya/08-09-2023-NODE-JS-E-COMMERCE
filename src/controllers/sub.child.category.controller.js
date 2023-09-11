@@ -69,12 +69,12 @@ const delete_sub_child_category = async(req,res) => {
 const update_sub_child_category = async(req,res) => {
   try {
     const reqbody = req.body;
-    const sub_child_category_id = req.params.categoryId;
+    const sub_child_category_id = req.params.sub_child_categoryId;
     const sub_child_category_exist = await sub_child_category_Service.get_sub_child_category_by_id(sub_child_category_id);
     if(!sub_child_category_exist){
       throw new Error("Sub-child-category not found -!- ");
     }
-    await sub_child_category_Service.update_sub_child_category(category_id,reqbody);
+    await sub_child_category_Service.update_sub_child_category(sub_child_category_id,reqbody);
     res.status(200).json({
       success: true,
       message: "Sub-child-category updated successfully ^-^ ",

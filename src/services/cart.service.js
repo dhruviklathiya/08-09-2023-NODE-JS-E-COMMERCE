@@ -4,6 +4,10 @@ const get_cart_by_useremail = async(email) => {
     return Cart.findOne({email});
 }
 
+const get_cart_by_id = async(cart_id) => {
+    return Cart.findById(cart_id);
+}
+
 const create_cart = async(reqbody) => {
     return Cart.create(reqbody);
 }
@@ -22,6 +26,7 @@ const update_cart = async(cart_id,reqbody) => {
 
 module.exports = {
     get_cart_by_useremail,
+    get_cart_by_id,
     create_cart,
     get_cart_list,
     delete_cart,

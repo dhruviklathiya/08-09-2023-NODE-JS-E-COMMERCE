@@ -27,7 +27,7 @@ const create_cart = async(req,res) => {
 const get_cart_list = async(req,res) => {
     try {
         const cart_list = await cart_Service.get_cart_list();
-        if(cart_list){
+        if(!cart_list){
             throw new Error("Cart list data does not exist -!-");
         }
         res.status(200).json({
@@ -45,12 +45,11 @@ const get_cart_list = async(req,res) => {
 
 const delete_cart = async(req,res) => {
     try {
-        const reqbody = req.body;
-        const cart_exist = await cart_Service.get_cart_by_useremail(reqbody.email)
+        const cart_exist = await cart_Service.get_cart_by_id(req.params.cartId)
         if(!cart_exist){
             throw new Error("Cart does not exist -!-");
         }
-        const cart_delete = await cart_Service.delete_cart(reqbody.cart_id);
+        const cart_delete = await cart_Service.delete_cart(req.params.cartId);
         if(!cart_delete){
             throw new Error("Something went wrong -!- ")
         }
@@ -68,16 +67,15 @@ const delete_cart = async(req,res) => {
 
 const update_cart = async(req,res) => {
     try {
-        const reqbody = req.body;
-        const cart_exist = await cart_Service.get_cart_by_useremail(reqbody.email)
+        const cart_exist = await cart_Service.get_cart_by_id(req.params.cartId)
         if(!cart_exist){
             throw new Error("Cart does not exist -!-");
         }
-        await cart_Service.update_cart(reqbody.cart_id,reqbody);
+        await cart_Service.update_cart(req.params.cartId,req.body);
         res.status(200).json({
             success:true,
             message:"Cart updated successfully ^-^ ",
-            data:reqbody
+            data:req.body
         });
     } catch (error) {
         res.status(400).json({
