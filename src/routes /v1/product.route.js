@@ -6,7 +6,7 @@ const validate = require("../../middlewares/validate")
 const router = express.Router()
 router.get(
     "/list",
-    product_Controller.product_list
+    product_Controller.get_product_list
 )
 router.post(
     "/create-product",
