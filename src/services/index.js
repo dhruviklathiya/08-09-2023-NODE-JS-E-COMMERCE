@@ -1,5 +1,6 @@
 module.exports.user_Service = require("./user.service")
 module.exports.cart_Service = require("./cart.service")
+module.exports.order_Service = require("./order.service")
 module.exports.product_Service = require("./product.service")
 module.exports.category_Service = require("./category.service")
 module.exports.sub_category_Service = require("./sub.category.service")
