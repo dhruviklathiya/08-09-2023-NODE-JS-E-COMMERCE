@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 
 const cart_Schema = new mongoose.Schema(
     {
-        email:{
-            type:String,
-            trim:true
-        },
         total_items:{
             type:Number,
             default:0
@@ -17,6 +13,30 @@ const cart_Schema = new mongoose.Schema(
         coupon_code:{
             type:String,
             trim:true
+        },
+        user: {
+            type: mongoose.Types.ObjectId,
+            ref: "User"
+        },
+        product1: {
+            type: mongoose.Types.ObjectId,
+            ref: "Product"
+        },
+        product2: {
+            type: mongoose.Types.ObjectId,
+            ref: "Product"
+        },
+        product3: {
+            type: mongoose.Types.ObjectId,
+            ref: "Product"
+        },
+        product4: {
+            type: mongoose.Types.ObjectId,
+            ref: "Product"
+        },
+        product5: {
+            type: mongoose.Types.ObjectId,
+            ref: "Product"
         },
         is_active:{
             type:Boolean,

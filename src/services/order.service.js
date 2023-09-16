@@ -1,7 +1,7 @@
 const { Order } = require("../models");
 
-const get_order_by_email = async(email) => {
-    return Order.findOne({email});
+const get_order_by_user = async(user) => {
+    return Order.findOne({user});
 }
 
 const create_order = async(reqbody) => {
@@ -9,7 +9,7 @@ const create_order = async(reqbody) => {
 }
 
 const get_order_list = async() => {
-    return Order.find();
+    return Order.find().populate("cart").populate("user");
 }
 
 const get_order_by_id = async(order_id) => {
@@ -25,7 +25,7 @@ const delete_order = async(order_id) => {
 }
 
 module.exports = {
-    get_order_by_email,
+    get_order_by_user,
     create_order,
     get_order_list,
     get_order_by_id,

@@ -1,11 +1,15 @@
-const { cart_Service } = require("../services");
+const { cart_Service,user_Service } = require("../services");
 
 const create_cart = async(req,res) => {
     try {
         const reqbody = req.body;
-        const cart_exist = await cart_Service.get_cart_by_useremail(reqbody.email);
+        const user_exist = await user_Service.get_user_by_id(reqbody.user);
+        if(!user_exist){
+            throw new Error("User does not exist -!-");
+        }
+        const cart_exist = await cart_Service.get_cart_by_user(reqbody.user);
         if(cart_exist){
-            throw new Error("Cart by this email already exist -!-");
+            throw new Error("Cart already exist for this user -!-");
         }
         const cart = await cart_Service.create_cart(reqbody);
         if(!cart){
@@ -67,11 +71,14 @@ const delete_cart = async(req,res) => {
 
 const update_cart = async(req,res) => {
     try {
-        const cart_exist = await cart_Service.get_cart_by_id(req.params.cartId)
+        const cart_exist = await cart_Service.get_cart_by_id(req.params.cartId);
         if(!cart_exist){
             throw new Error("Cart does not exist -!-");
         }
-        await cart_Service.update_cart(req.params.cartId,req.body);
+        const updated = await cart_Service.update_cart(req.params.cartId,req.body);
+        if(!updated){
+            throw new Error("Something went wrong");
+        }
         res.status(200).json({
             success:true,
             message:"Cart updated successfully ^-^ ",

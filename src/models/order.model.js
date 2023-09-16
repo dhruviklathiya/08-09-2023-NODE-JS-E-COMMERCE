@@ -2,15 +2,7 @@ const mongoose = require("mongoose");
 
 const order_Schema = new mongoose.Schema(
     {
-        email:{
-            type:String,
-            trim:true
-        },
         order_status :{
-            type:String,
-            trim:true
-        },
-        delivery_address:{
             type:String,
             trim:true
         },
@@ -18,13 +10,13 @@ const order_Schema = new mongoose.Schema(
             type:String,
             trim:true
         },
-        total_items:{
-            type:Number,
-            default:0
+        cart:{
+            type:mongoose.Types.ObjectId,
+            ref:"Cart"
         },
-        total_price:{
-            type:Number,
-            default:0
+        user:{
+            type:mongoose.Types.ObjectId,
+            ref:"User"
         },
         is_active:{
             type:Boolean,

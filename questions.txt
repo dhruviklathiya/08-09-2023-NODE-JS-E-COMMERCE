@@ -19,9 +19,13 @@
 
 ====> pick.js from helpers
 
+====> token.service.js => generatetoken & savetoken with payload and JWT_SECRET_KEY
 
-cart & order schema Check
-Product image
-====> How to add array in schema for example order and cart can have multiple items or products
-====> What to populate in order and cart
-=====> Multiple populate like product has sub_child_category,sub_category,category also product is added by user at some point
+====> banner.model.js =>
+                    toJSON: {
+                        transform: function (doc, data) {
+                          if (data?.banner_image) {
+                            data.banner_image = `${config.base_url}banner_images/${data.banner_image}`;
+                          }
+                        },
+                      },

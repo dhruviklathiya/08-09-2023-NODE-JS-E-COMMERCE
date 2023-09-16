@@ -1,7 +1,8 @@
 const express = require("express");
 const { category_Validation } = require("../../validations");
 const { category_Controller } = require("../../controllers");
-const validate = require("../../middlewares/validate")
+const validate = require("../../middlewares/validate");
+const auth = require("../../middlewares/auth");
 
 const router = express.Router()
 router.get(

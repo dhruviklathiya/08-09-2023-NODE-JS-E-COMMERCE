@@ -245,3 +245,56 @@ Create controller folder
       Create index.js of controller
       Create particular model files
       Export in single name from index.js of model
+<?????????????????????????????????? Upper Not Completed ??????????????????????????????????>
+
+
+<================================== Authorization ==================================>
+npm i jsonwebtoken
+npm i moment
+
+middleware auth.js =>
+            Passed token from insomnia or any API hitter will be come in code by req.headers.authorization
+            Understand and past this easy code:
+                const jwt = require("jsonwebtoken");
+                const { User } = require("../models");
+                const config = require("../config/config");
+
+                const auth = () => async (req, res, next) => {
+                  try {
+                    const token = req.headers.authorization;
+                    console.log("Token is ===============> " + token);
+                    if (!token) {
+                      return next(res.status(401).json({
+                        status: 401,
+                        message : "Please authenticate!"
+                      }));
+                    }
+
+                    const decoded = jwt.verify(
+                      token.replace("Bearer ", ""),
+                      config.jwt.secret_key
+                    );
+
+                    if (!decoded) {
+                      return next(new Error("Please enter valid token!"));
+                    }
+                    const user = await User.findOne({ _id: decoded.user });
+                    if (!user) {
+                      return next(new Error("Please authenticate!"));
+                    }
+
+                    req.user = user;
+                    next();
+                  } catch (error) {
+                    return next(new Error(error));
+                  }
+                };
+
+                module.exports = auth;
+
+After this create token model => Routes => Validations => controller => call auth() function from middleware to routes
+
+
+<================================== Multer image upload ==================================>
+npm i multer
+

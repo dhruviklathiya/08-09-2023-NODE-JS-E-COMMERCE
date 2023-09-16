@@ -16,6 +16,11 @@ const user_Schema = new mongoose.Schema(
       },
       password: {
         type: String,
+        trim: true,
+      },
+      address:{
+        type: String,
+        trim: true,
       },
       is_active: {
         type: Boolean,
