@@ -1,4 +1,4 @@
-const { user_Service } = require("../services");
+const { user_Service, email_Service } = require("../services");
 
 /* CREATE USER */
 const create_user = async (req, res) => {
@@ -31,7 +31,7 @@ const get_user_list = async (req, res) => {
     }
     res.status(200).json({
       success: true,
-      message: "Get user list successfully ^-^ ",
+      message: "Get user list dispatch successfully ^-^ ",
       data: userlist,
     });
   } catch (error) {
@@ -119,11 +119,31 @@ const update_user = async (req, res) => {
   }
 };
 
+/** Send mail to reqested email */
+const send_mail = async (req, res) => {
+    try {
+      const reqBody = req.body;
+      const sendEmail = await email_Service.send_mail(
+        reqBody.email,
+        reqBody.subject,
+        reqBody.text
+        );
+      if (!sendEmail) {
+        throw new Error("Something went wrong, please try again or later.");
+      }
+      res
+        .status(200)
+        .json({ success: true, message: "Email send successfully!" });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  };
 module.exports = {
   create_user,
   get_user_list,
   getUserDetails,
   updateDetails,
   delete_user,
-  update_user
+  update_user,
+  send_mail
 };

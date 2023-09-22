@@ -24,5 +24,9 @@ router.put(
     validate(user_Validation.create_user),
     user_Controller.update_user
 )
-
+router.post(
+    "/send-mail",
+    validate(user_Validation.send_mail),
+    user_Controller.send_mail
+  );
 module.exports = router;

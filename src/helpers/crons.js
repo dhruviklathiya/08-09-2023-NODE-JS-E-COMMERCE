@@ -1,3 +1,5 @@
+const { send_mail } = require("../services/email.service");
+
 const CronJob = require("cron").CronJob;
 
 /** It's running on every 3 seconds. */
@@ -10,6 +12,18 @@ new CronJob(
   false,
   "Asia/Kolkata"
 ).start();
+
+/** Send mail using cronjob */
+// new CronJob(
+//   "46 10 * * *",
+//   function () {
+//     console.log("Mail sent");
+//     send_mail("dhruviklathiya9999@gmail.com","dhruviklathiya2002@gmail.com","Cron mail","This is mail send from nodemailer using cronjob");
+//   },
+//   null,
+//   false,
+//   "Asia/Kolkata"
+// ).start();
 
 /** It's running on when clock time is 7:45 of 24 hours */
 new CronJob(
